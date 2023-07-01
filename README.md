@@ -8,7 +8,7 @@ With great sadness I found out today that two of my late father's friends and co
 
 ## IN MEMORIAM
 
-Rodan Gheorghe
+Gheorghe Rodan
 
 Cornel Șerban Oprișiu
 
