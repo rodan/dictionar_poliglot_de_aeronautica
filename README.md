@@ -1,7 +1,7 @@
 
 ## Dicționar poliglot de aeronautică
 
-With great sadness I found out today that two of my late father's friends and co-authors of this unpublished book have passed away. I hope that sharing this otherwise lost body of work helps future aeronautical engineers not only find answers in their field of work but also makes them feel that decade long heart-felt friendships are the genesis of nice projects. just like this book here.
+With great sadness I found out today that two of my late father's friends and co-authors of this unpublished book have passed away. I hope that sharing this otherwise lost body of work helps future aeronautical engineers not only find answers in their field of work but also makes them realize that decade long heart-felt friendships are the genesis of nice projects. just like this book here.
 
 ![cover](./assets/cover_thumb.png)
 
