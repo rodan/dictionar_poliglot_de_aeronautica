@@ -1,0 +1,18 @@
+	<dc-metadata>
+		<dc:Identifier id="uid">dic_poli_aero_en</dc:Identifier>
+		<!-- Title of the document -->
+		<dc:Title><h2>Dicționar poliglot de aeronautică (en)</h2></dc:Title>
+		<dc:creator opf:role="aut">Cornel Oprișiu</dc:creator>
+		<dc:creator opf:role="aut">Dan Pantazopol</dc:creator>
+		<dc:creator opf:role="aut">Gheorghe Rodan</dc:creator>
+		<dc:creator opf:role="aut">Dan-Mihai Ștefănescu</dc:creator>
+		<dc:description>Multilingual Aeronautical Dictionary</dc:description>
+		<dc:rights>public domain</dc:rights>
+		<dc:Language>en</dc:Language>
+	</dc-metadata>
+	<x-metadata>
+		<EmbeddedCover>cover-en.png</EmbeddedCover>
+			<output encoding="utf-8" flatten-dynamic-dir="yes"/>
+		<DictionaryInLanguage>en</DictionaryInLanguage>
+		<DictionaryOutLanguage>en</DictionaryOutLanguage>
+	</x-metadata>
