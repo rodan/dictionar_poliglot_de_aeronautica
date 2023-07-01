@@ -22,7 +22,7 @@ Dan Pantazopol
 
 ### contents
 
-in the release section you can find the dictionary in dict, stardict and mobi formats. this allows the use of third-party software to perform queries in any of the 6 languages: english, romanian, french, italian, spanish and german.
+in the [release](https://github.com/rodan/dictionar_poliglot_de_aeronautica/releases/) section you can find the dictionary in dict, stardict and mobi formats. this allows the use of third-party software to perform queries in any of the 6 languages: english, romanian, french, italian, spanish and german.
 
 the 'dict' format can be used with the dictionary database server, called dictd. details can be found here: https://directory.fsf.org/wiki/Dictd
 
