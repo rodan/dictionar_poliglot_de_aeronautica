@@ -22,7 +22,7 @@ struct dict_item_t {
     char *definition;
 };
 
-void die(char *fmt, ...);
+void die(const char *fmt, ...);
 uint16_t lng_to_int(char *buf);
 uint8_t lng_to_str(const uint16_t lng_id, char *lng);
 void my_strstrip(char *str);

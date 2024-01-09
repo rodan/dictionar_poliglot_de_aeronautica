@@ -13,7 +13,7 @@
 
 extern char keyword_lng_str[3];
 
-void die(char *fmt, ...)
+void die(const char *fmt, ...)
 {
     va_list args;
     va_start(args, fmt);

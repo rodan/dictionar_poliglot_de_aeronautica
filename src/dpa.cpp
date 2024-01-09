@@ -5,7 +5,7 @@
 #include <stdlib.h>
 #include <sqlite3.h>
 
-void die(char *fmt, ...)
+void die(const char *fmt, ...)
 {
     va_list args;
     va_start(args, fmt);
@@ -37,7 +37,7 @@ lang can be one of:\n \
    gk        german keyword\n");
 }
 
-static int callback(void *NotUsed, int argc, char **argv, char **azColName)
+static int callback(void *, int argc, char **argv, char **azColName)
 {
     int i;
     for (i = 0; i < argc; i++) {

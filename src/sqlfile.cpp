@@ -191,7 +191,7 @@ int main(int argc, char *argv[])
 
     if (!cur_lng) {
         show_usage();
-        die("unknown language specified, exiting");        
+        die("unknown language specified, exiting");
     }
 
     lng_to_str(cur_lng, keyword_lng_str);
