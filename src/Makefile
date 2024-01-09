@@ -27,7 +27,7 @@ LDFLAGS_REL	 += -Wl,-s
 CFLAGS_DBG	 += -O1 -ggdb -DNDEBUG # -pg
 LDFLAGS_DBG	 += # -pg
 
-TARGET_CFLAGS=-fPIC -pedantic -Wall -Wextra -Wno-format-truncation -Wno-deprecated-copy -Wno-format-security -Wa,-ahl=$(@:.o=.s)
+TARGET_CFLAGS=-fPIC -pedantic -Wall -Wextra -Wno-write-strings -Wno-type-limits -Wno-format-truncation -Wno-deprecated-copy -Wno-format-security -Wa,-ahl=$(@:.o=.s)
 TARGET_LDFLAGS=$(shell pkgconf --libs sqlite3)
 
 DEBUG := $(shell grep "^#define CONFIG_DEBUG" config.h)
