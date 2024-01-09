@@ -128,6 +128,7 @@ EOF
         [ -z "${DO_NOT_ZIP}" ] && zip "dictionar_poliglot_de_aeronautica-${lang}-dict.zip" "dictionar_poliglot_de_aeronautica-${lang}.dict.dz" "dictionar_poliglot_de_aeronautica-${lang}.index"
     done
     popd
+    return 0
 }
 
 do_mobi()
@@ -143,6 +144,7 @@ do_mobi()
         create_mobi "${lang}"
     done
     popd
+    return 0
 }
 
 do_stardict()
@@ -193,5 +195,6 @@ do_stardict()
         done
         popd
     }
+    return 0
 }
 
