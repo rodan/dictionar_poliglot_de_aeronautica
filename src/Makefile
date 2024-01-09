@@ -65,7 +65,7 @@ build/lib/tlpi/%.o: ${TLPI_DIR}/%.cpp
 build/lib/stardict/%.o: ${SD_DIR}/%.cpp
 	@mkdir -p build/lib/stardict
 	@echo -e " * $(@F)"
-	$(CXX) $(INCLUDES) $(TARGET_CFLAGS) $(TARGET_CXXFLAGS) -c $< -o $@
+	@$(CXX) $(INCLUDES) $(TARGET_CFLAGS) $(TARGET_CXXFLAGS) -c $< -o $@
 
 build/%.o: %.cpp
 	@mkdir -p build
