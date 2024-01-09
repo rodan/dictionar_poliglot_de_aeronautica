@@ -97,14 +97,18 @@ de()
 
 do_dict()
 {
+    opt_lang="$@"
+    lang="en ro fr it es de"
+    [ -n "${opt_lang}" ] && lang="${opt_lang}"
+
     mkdir -p dict
     pushd dict
-    for lang in en ro fr it es de; do
+    for lang in ${lang}; do
         cat << EOF > "dictionar_poliglot_de_aeronautica-${lang}.txt"
 %h about
   Dicționar poliglot de aeronautică (${lang})
 
-               Autori 
+               Autori
            Cornel Oprișiu
               Dan Pantazopol
          Gheorghe Rodan
@@ -121,16 +125,20 @@ EOF
         ${lang} dict >> "dictionar_poliglot_de_aeronautica-${lang}.txt"
         < "dictionar_poliglot_de_aeronautica-${lang}.txt" dictfmt -s "Dicționar poliglot de aeronautică (${lang})" --utf8 -p "dictionar_poliglot_de_aeronautica-${lang}"
         dictzip "dictionar_poliglot_de_aeronautica-${lang}.dict"
-        zip "dictionar_poliglot_de_aeronautica-${lang}-dict.zip" "dictionar_poliglot_de_aeronautica-${lang}.dict.dz" "dictionar_poliglot_de_aeronautica-${lang}.index"
+        [ -z "${DO_NOT_ZIP}" ] && zip "dictionar_poliglot_de_aeronautica-${lang}-dict.zip" "dictionar_poliglot_de_aeronautica-${lang}.dict.dz" "dictionar_poliglot_de_aeronautica-${lang}.index"
     done
     popd
 }
 
 do_mobi()
 {
+    opt_lang="$@"
+    lang="en ro fr it es de"
+    [ -n "${opt_lang}" ] && lang="${opt_lang}"
+
     mkdir -p mobi
     pushd mobi
-    for lang in en ro fr it es de; do
+    for lang in ${lang}; do
         ${lang} th > "dictionar_poliglot_de_aeronautica-${lang}.tab"
         create_mobi "${lang}"
     done
@@ -139,38 +147,51 @@ do_mobi()
 
 do_stardict()
 {
-    make -C ../
-    for lang in en ro fr it es de; do
+    opt_lang="$@"
+    lang="en ro fr it es de"
+    [ -n "${opt_lang}" ] && lang="${opt_lang}"
+
+    for lang in ${lang}; do
         mkdir -p "stardict/dictionar_poliglot_de_aeronautica-${lang}"
     done
 
-    pushd stardict/dictionar_poliglot_de_aeronautica-en
-    ../../../stardict-sqlfile -d "../${db}" -l 'ek, ed, gk, sk, fk, ik, rk, rd'
-    popd
-    pushd stardict/dictionar_poliglot_de_aeronautica-de
-    ../../../stardict-sqlfile -d "../${db}" -l 'gk, ek, ed, sk, fk, ik, rk, rd'
-    popd
-    pushd stardict/dictionar_poliglot_de_aeronautica-es
-    ../../../stardict-sqlfile -d "../${db}" -l 'sk, gk, ek, ed, fk, ik, rk, rd'
-    popd
-    pushd stardict/dictionar_poliglot_de_aeronautica-fr
-    ../../../stardict-sqlfile -d "../${db}" -l 'fk, gk, ek, ed, sk, ik, rk, rd'
-    popd
-    pushd stardict/dictionar_poliglot_de_aeronautica-it
-    ../../../stardict-sqlfile -d "../${db}" -l 'ik, gk, ek, ed, sk, fk, rk, rd'
-    popd
-    pushd stardict/dictionar_poliglot_de_aeronautica-ro
-    ../../../stardict-sqlfile -d "../${db}" -l 'rpk, rd, gk, ek, ed, sk, fk, ik'
-    popd
+    echo "${lang}" | grep -q 'en' && {
+        pushd stardict/dictionar_poliglot_de_aeronautica-en
+        ../../../stardict-sqlfile -d "../${db}" -l 'ek, ed, gk, sk, fk, ik, rk, rd'
+        popd
+    }
+    echo "${lang}" | grep -q 'de' && {
+        pushd stardict/dictionar_poliglot_de_aeronautica-de
+        ../../../stardict-sqlfile -d "../${db}" -l 'gk, ek, ed, sk, fk, ik, rk, rd'
+        popd
+    }
+    echo "${lang}" | grep -q 'es' && {
+        pushd stardict/dictionar_poliglot_de_aeronautica-es
+        ../../../stardict-sqlfile -d "../${db}" -l 'sk, gk, ek, ed, fk, ik, rk, rd'
+        popd
+    }
+    echo "${lang}" | grep -q 'fr' && {
+        pushd stardict/dictionar_poliglot_de_aeronautica-fr
+        ../../../stardict-sqlfile -d "../${db}" -l 'fk, gk, ek, ed, sk, ik, rk, rd'
+        popd
+    }
+    echo "${lang}" | grep -q 'it' && {
+        pushd stardict/dictionar_poliglot_de_aeronautica-it
+        ../../../stardict-sqlfile -d "../${db}" -l 'ik, gk, ek, ed, sk, fk, rk, rd'
+        popd
+    }
+    echo "${lang}" | grep -q 'ro' && {
+        pushd stardict/dictionar_poliglot_de_aeronautica-ro
+        ../../../stardict-sqlfile -d "../${db}" -l 'rpk, rd, gk, ek, ed, sk, fk, ik'
+        popd
+    }
 
-    pushd stardict
-    for lang in en ro fr it es de; do
-        zip  "dictionar_poliglot_de_aeronautica-${lang}-stardict.zip" "dictionar_poliglot_de_aeronautica-${lang}"/*
-    done
-    popd
+    [ -z "${DO_NOT_ZIP}" ] && {
+        pushd stardict
+        for lang in en ro fr it es de; do
+            [ -e "dictionar_poliglot_de_aeronautica-${lang}" ] && zip  "dictionar_poliglot_de_aeronautica-${lang}-stardict.zip" "dictionar_poliglot_de_aeronautica-${lang}"/*
+        done
+        popd
+    }
 }
-
-#do_dict
-do_stardict
-#do_mobi
 
