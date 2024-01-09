@@ -9,6 +9,8 @@ SD_DIR    = ../lib/stardict
 SD_SRC    = ${SD_DIR}/ifo_file.cpp ${SD_DIR}/lib_binary_dict_parser.cpp ${SD_DIR}/lib_chars.cpp ${SD_DIR}/lib_dict_data_block.cpp ${SD_DIR}/lib_dict_verify.cpp ${SD_DIR}/lib_res_store.cpp ${SD_DIR}/libcommon.cpp
 SD_OBJ    = $(patsubst ${SD_DIR}/%.cpp,build/lib/stardict/%.o,${SD_SRC})
 
+LIBS_OBJ = $(TLPI_OBJ) $(SD_OBJ)
+
 INCLUDES  := -I ./ -I $(TLPI_DIR) -I $(SD_DIR) $(shell pkgconf --cflags glib-2.0) $(shell pkgconf --cflags libxml-2.0)
 LOCAL_SRC := dpa.cpp
 SRC        = $(LOCAL_SRC) $(TLPI_SRC) $(SD_SRC)
@@ -48,7 +50,9 @@ TARGET_CXXFLAGS+=-std=c++17
 .PHONY: tags
 .PHONY: lib
 
-all : $(EXOUTPUT) stardict-sqlfile
+all : libs $(EXOUTPUT) stardict-sqlfile
+libs : $(LIBS_OBJ)
+$(EXOUTPUT) : libs
 
 version.h: $(SRC)
 	@./tools/setver.sh
