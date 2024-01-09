@@ -25,29 +25,21 @@ LDFLAGS_REL	 += -Wl,-s
 CFLAGS_DBG	 += -O1 -ggdb -DNDEBUG # -pg
 LDFLAGS_DBG	 += # -pg
 
-DEFAULT_FLAGS=-fPIC -pedantic -Wall -Wextra -Wno-format-truncation -Wno-write-strings -Wno-deprecated-copy -Wa,-ahl=$(@:.o=.s)
-DEFAULT_LDFLAGS=
-
-# First set the flags to their defaults if not supplied externally.
-CFLAGS?=$(DEFAULT_FLAGS)
-CXXFLAGS?=$(DEFAULT_FLAGS)
-LDFLAGS?=$(DEFAULT_LDFLAGS)
-
-CXXFLAGS+=-std=c++17
+TARGET_CFLAGS=-fPIC -pedantic -Wall -Wextra -Wno-format-truncation -Wno-deprecated-copy -Wno-format-security -Wa,-ahl=$(@:.o=.s)
+TARGET_LDFLAGS=$(shell pkgconf --libs sqlite3)
 
 DEBUG := $(shell grep "^#define CONFIG_DEBUG" config.h)
-CFLAGS +=
-#LDFLAGS += $(shell pkgconf --libs glib-2.0) $(shell pkgconf --libs libxml-2.0) $(shell pkgconf --libs zlib) $(shell pkgconf --libs sqlite3)
-LDFLAGS += $(shell pkgconf --libs sqlite3)
 ifeq ($(DEBUG),)
 TARGET	:= RELEASE
-CFLAGS	+= $(CFLAGS_REL)
-LDFLAGS	+= $(LDFLAGS_REL)
+TARGET_CFLAGS	+= $(CFLAGS_REL)
+TARGET_LDFLAGS	+= $(LDFLAGS_REL)
 else
 TARGET	:= DEBUG
-CFLAGS	+= $(CFLAGS_DBG)
-LDFLAGS	+= $(LDFLAGS_DBG)
+TARGET_CFLAGS	+= $(CFLAGS_DBG)
+TARGET_LDFLAGS	+= $(LDFLAGS_DBG)
 endif
+
+TARGET_CXXFLAGS+=-std=c++17
 
 #COVERITY_SCAN_TOKEN := $(shell cat ../.secrets.COVERITY_SCAN_TOKEN)
 
@@ -56,7 +48,7 @@ endif
 .PHONY: tags
 .PHONY: lib
 
-all : version.h $(EXOUTPUT) stardict-sqlfile 
+all : $(EXOUTPUT) stardict-sqlfile
 
 version.h: $(SRC)
 	@./tools/setver.sh
@@ -64,35 +56,35 @@ version.h: $(SRC)
 build/lib/tlpi/%.o: ${TLPI_DIR}/%.cpp
 	@mkdir -p build/lib/tlpi
 	@echo -e " * $(@F)"
-	@$(CXX) $(INCLUDES) $(CFLAGS) $(CXXFLAGS) -c $< -o $@
+	@$(CXX) $(INCLUDES) $(TARGET_CFLAGS) $(TARGET_CXXFLAGS) -c $< -o $@
 
 build/lib/stardict/%.o: ${SD_DIR}/%.cpp
 	@mkdir -p build/lib/stardict
 	@echo -e " * $(@F)"
-	$(CXX) $(INCLUDES) $(CFLAGS) $(CXXFLAGS) -c $< -o $@
+	$(CXX) $(INCLUDES) $(TARGET_CFLAGS) $(TARGET_CXXFLAGS) -c $< -o $@
 
 build/%.o: %.cpp
 	@mkdir -p build
 	@echo -e " * $(@F)"
-	@$(CXX) $(INCLUDES) $(CFLAGS) $(CXXFLAGS) -c $< -o $@
+	@$(CXX) $(INCLUDES) $(TARGET_CFLAGS) $(TARGET_CXXFLAGS) -c $< -o $@
 
 %.o: %.cpp
 	@echo -e " * $(@F)"
-	@$(CXX) $(INCLUDES) $(CFLAGS) $(CXXFLAGS) -c $< -o $@
+	@$(CXX) $(INCLUDES) $(TARGET_CFLAGS) $(TARGET_CXXFLAGS) -c $< -o $@
 
 %.o: %.c
 	@echo -e " * $(@F)"
-	@$(CC) $(INCLUDES) $(CFLAGS) -c $< -o $@
+	@$(CC) $(INCLUDES) $(TARGET_CFLAGS) -c $< -o $@
 
 $(EXOUTPUT): $(LOCAL_OBJECTS) $(TLPI_OBJ)
 	@echo -e "\n>> Building $@ as target $(TARGET)"
-	@$(CXX) $(LDFLAGS) $(LOCAL_OBJECTS) $(TLPI_OBJ) -o $@ && size $@
+	@$(CXX) $(TARGET_LDFLAGS) $(LOCAL_OBJECTS) $(TLPI_OBJ) -o $@ && size $@
 
 stardict-sqlfile: $(LOCAL_SQLFILE_OBJ) $(TLPI_OBJ) $(SD_OBJ)
 	@echo -e "\n>> Building tool sqlfile $@ as target $(TARGET)"
-	@$(CXX) $(LDFLAGS) $(LOCAL_SQLFILE_OBJ) $(TLPI_OBJ) $(SD_OBJ) $(shell pkgconf --libs glib-2.0) $(shell pkgconf --libs libxml-2.0) $(shell pkgconf --libs zlib) -o $@ && size $@
+	@$(CXX) $(TARGET_LDFLAGS) $(LOCAL_SQLFILE_OBJ) $(TLPI_OBJ) $(SD_OBJ) $(shell pkgconf --libs glib-2.0) $(shell pkgconf --libs libxml-2.0) $(shell pkgconf --libs zlib) -o $@ && size $@
 
-clean : 
+clean :
 	@${RM} build/*.o build/*.s ${PROJ} stardict-sqlfile build/*.dict.dz build/*.index build/*.txt
 	@${RM} -rf cov-int
 
